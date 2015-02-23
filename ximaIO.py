@@ -2,32 +2,59 @@ import numpy as np
 import os.path
 import struct
 
+#IO operations for ima format.
 def imaread(imgName):
-	"""Reads a *ima file. ImgName can be with or without extension"""
+	""" Reads a *ima file. ImgName can be with or without extension. """
 	if imgName.endswith('.ima'):
 		imgName = os.path.splitext(imgName)[0]
 
 	return _imaread(imgName)
 
 def imawrite(img, imgName):
-	"""Writes img to imgName. imgName can come with or without extension"""
+	""" Writes img to imgName. imgName can come with or without extension. """
 	if imgName.endswith('.ima'):
 		imgName = os.path.splitext(imgName)[0]
 
 	return _imawrite(img, imgName)
 
+#IO operations for imw format.
+def imwread(imgName):
+	""" Reads a *.imw file. ImgName can be with or without extension. """
+	if imgName.endswith('.imw'):
+		imgName = os.path.splitext(imgName)[0]
+
+	return _imwread(imgName)
+
+def imwwrite(img, imgName):
+	""" Write a *.imw file. ImgName can be with or without extension. """
+	if imgName.endswith('.imw'):
+		imgName = os.path.splitext(imgName)[0]
+
+	return _imwwrite(img, imgName)
+
+#Internal functions.
 def _imaread(imgName):
-	"""Reads a *.ima file. imgName should come with no extension"""
+	""" Reads a *.ima file. imgName should come with no extension. """
 	w, h = _readDim(imgName + '.dim')
 	return _readImage(imgName + '.ima', w, h, 'B', 1)
 
 def _imawrite(img, imgName):
-	"""Writes img to an imgName.ima file. imgName should come with no extension"""
+	""" Writes img to an imgName.ima file. imgName should come with no extension. """
 	_writeDim(img, imgName + '.dim')
 	_writeImage(img, imgName + '.ima', 'B')
 
+def _imwread(imgName):
+	""" Reads a *.imw file. imgName should come with no extension. """
+	w, h = _readDim(imgName + '.dim')
+	return _readImage(imgName + '.imw', w, h, 'H', 2)
+
+def _imwwrite(img, imgName):
+	""" Writes img to an imgName.ima file. imgName should come with no extension. """
+	_writeDim(img, imgName + '.dim')
+	_writeImage(img, imgName + '.imw', 'H')
+
 def _readDim(dimFile):
-	""" Reads a *.dim file and return width and height """
+	""" Reads a *.dim file and return width and height. """
 	with open(dimFile) as f:
 		tmp = f.readline().split()
 		w = int(tmp[0])
