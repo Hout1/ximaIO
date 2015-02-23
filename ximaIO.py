@@ -2,6 +2,26 @@ import numpy as np
 import os.path
 import struct
 
+#General IO functions
+def ximaread(imgName):
+	""" Reads a file in a xima format (currently only ima and imw are supported). """
+	if imgName.endswith('.ima'):
+		return imaread(imgName)
+	elif imgName.endswith('.imw'):
+		return imwread(imgName)
+	else:
+		raise Exception("Format not currently supported.")
+
+def ximawrite(img, imgName):
+	""" Writes a file in a xima format (currently only ima and imw are supported). """
+	if imgName.endswith('.ima'):
+		return imawrite(img, imgName)
+	elif imgName.endswith('.imw'):
+		return imwwrite(img, imgName)
+	else:
+		raise Exception("Format not currently supported.")
+
+
 #IO operations for ima format.
 def imaread(imgName):
 	""" Reads a *ima file. ImgName can be with or without extension. """
@@ -17,6 +37,7 @@ def imawrite(img, imgName):
 
 	return _imawrite(img, imgName)
 
+
 #IO operations for imw format.
 def imwread(imgName):
 	""" Reads a *.imw file. ImgName can be with or without extension. """
@@ -31,6 +52,8 @@ def imwwrite(img, imgName):
 		imgName = os.path.splitext(imgName)[0]
 
 	return _imwwrite(img, imgName)
+
+
 
 #Internal functions.
 def _imaread(imgName):
