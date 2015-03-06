@@ -4,20 +4,24 @@ import struct
 
 #General IO functions
 def ximaread(imgName):
-	""" Reads a file in a xima format (currently only ima and imw are supported). """
+	""" Reads a file in a xima format (currently only ima, imw and imf are supported). """
 	if imgName.endswith('.ima'):
 		return imaread(imgName)
 	elif imgName.endswith('.imw'):
 		return imwread(imgName)
+	elif imgName.endswith('.imf'):
+		return imfread(imgName)
 	else:
 		raise Exception("Format not currently supported.")
 
 def ximawrite(img, imgName):
-	""" Writes a file in a xima format (currently only ima and imw are supported). """
+	""" Writes a file in a xima format (currently only ima, imw and imf are supported). """
 	if imgName.endswith('.ima'):
 		return imawrite(img, imgName)
 	elif imgName.endswith('.imw'):
 		return imwwrite(img, imgName)
+	elif imgName.endswith('.imf'):
+		return imfwrite(img, imgName)
 	else:
 		raise Exception("Format not currently supported.")
 
@@ -54,6 +58,21 @@ def imwwrite(img, imgName):
 	return _imwwrite(img, imgName)
 
 
+#IO operations for imf format.
+def imfread(imgName):
+	""" Reads a *.imf file. ImgName can be with or without extension. """
+	if imgName.endswith('.imf'):
+		imgName = os.path.splitext(imgName)[0]
+
+	return _imfread(imgName)
+
+def imfwrite(img, imgName):
+	""" Write a *.imf file. ImgName can be with or without extension. """
+	if imgName.endswith('.imf'):
+		imgName = os.path.splitext(imgName)[0]
+
+	return _imfwrite(img, imgName)
+
 
 #Internal functions.
 def _imaread(imgName):
@@ -72,9 +91,20 @@ def _imwread(imgName):
 	return _readImage(imgName + '.imw', w, h, 'H', 2)
 
 def _imwwrite(img, imgName):
-	""" Writes img to an imgName.ima file. imgName should come with no extension. """
+	""" Writes img to an imgName.imw file. imgName should come with no extension. """
 	_writeDim(img, imgName + '.dim')
 	_writeImage(img, imgName + '.imw', 'H')
+
+def _imfread(imgName):
+	""" Reads a *.imf file. imgName should come with no extension. """
+	w, h = _readDim(imgName + '.dim')
+	return _readImage(imgName + '.imf', w, h, 'f', 4)
+
+def _imfwrite(img, imgName):
+	""" Writes img to an imgName.imf file. imgName should come with no extension. """
+	_writeDim(img, imgName + '.dim')
+	_writeImage(img, imgName + '.imf', 'f')
+
 
 def _readDim(dimFile):
 	""" Reads a *.dim file and return width and height. """
