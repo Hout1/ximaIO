@@ -88,12 +88,12 @@ def _imawrite(img, imgName):
 def _imwread(imgName):
 	""" Reads a *.imw file. imgName should come with no extension. """
 	w, h = _readDim(imgName + '.dim')
-	return _readImage(imgName + '.imw', w, h, 'H', 2)
+	return _readImage(imgName + '.imw', w, h, '>H', 2)
 
 def _imwwrite(img, imgName):
 	""" Writes img to an imgName.imw file. imgName should come with no extension. """
 	_writeDim(img, imgName + '.dim')
-	_writeImage(img, imgName + '.imw', 'H')
+	_writeImage(img, imgName + '.imw', '>H')
 
 def _imfread(imgName):
 	""" Reads a *.imf file. imgName should come with no extension. """
