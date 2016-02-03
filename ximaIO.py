@@ -124,7 +124,7 @@ def _writeDim(img, dimFile):
 
 def _readImage(imgName, w, h, type, nbBytes):
 	""" Reads an image coded in any bynary format. """
-	img = np.empty([h, w])
+	img = np.empty([h, w], dtype=type)
 	with open(imgName) as f:
 		for i in range(0, h):
 			for j in range(0, w):
